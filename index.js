@@ -273,6 +273,16 @@ function chainIdToChain(_chainId) {
       modalBody.replaceChild(emptyNode, currentChain);
       currentChain = emptyNode;
   }
+  ftNode.getElementsByTagName("img")[0].src = "./alchemyLogo.png";
+  ttNode.getElementsByTagName("img")[0].src = "./alchemyLogo.png";
+  ftNode.getElementsByTagName("span")[0].textContent = "";
+  ttNode.getElementsByTagName("span")[0].textContent = "";
+  faNode.value = "";
+  taNode.value = "";
+  pretAmount.from = "";
+  pretAmount.to = "";
+  currentTrade.from = "";
+  currentTrade.to = "";
 }
 
 function callMetamask(to, sendData, foo) {
