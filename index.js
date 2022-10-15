@@ -275,8 +275,8 @@ function chainIdToChain(_chainId) {
   }
   ftNode.getElementsByTagName("img")[0].src = "./alchemyLogo.png";
   ttNode.getElementsByTagName("img")[0].src = "./alchemyLogo.png";
-  ftNode.getElementsByTagName("span")[0].textContent = "";
-  ttNode.getElementsByTagName("span")[0].textContent = "";
+  ftNode.getElementsByTagName("span")[0].textContent = "Select token";
+  ttNode.getElementsByTagName("span")[0].textContent = "Select token";
   faNode.value = "";
   taNode.value = "";
   pretAmount.from = "";
