@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <link rel="icon" href="./alchemyLogo.png" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, shrink-to-fit=no"
+    />
+    <title>Swap Demo Tutorial</title>
+    <script
+      src="https://code.jquery.com/jquery-3.6.0.min.js"
+      integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4="
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
+      integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
+      crossorigin="anonymous"
+    ></script>
+    <link
+      rel="stylesheet"
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+      integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh"
+      crossorigin="anonymous"
+    />
+    <link rel="stylesheet" href="./style.css" />
+  </head>
+
+  <body style="background-image: url('bg.png'); background-size: cover">
+    <nav class="navbar navbar-expand-lg">
+      <a style="color: azure" class="navbar-brand">My DEX Aggregator</a>
+      <li class="connect">
+        <div
+          id="chain_button"
+          class="btn btn-outline-primary my-2 my-sm-0"
+          type="submit"
+          style="color: azure; border: none; border-radius: 20px"
+        >
+          <img src="./alchemyLogo.png" height="30" width="30" />
+          <span>Switch Chain</span>
+        </div>
+        <button
+          id="login_button"
+          class="btn btn-outline-primary my-2 my-sm-0 c1"
+          type="submit"
+        >
+          Connect Wallet
+        </button>
+      </li>
+    </nav>
+    <div class="container">
+      <div class="row">
+        <div class="col col-md-6 offset-md-3" id="window">
+          <h4>
+            Swap
+            <span
+              id="loadStr"
+              style="align-items: center; margin-left: 15%"
+            ></span>
+          </h4>
+          <div id="form">
+            <div class="swapbox">
+              <div
+                class="token_select"
+                id="from_token_select"
+                data-toggle="modal"
+                data-target="#token_modal"
+              >
+                <img
+                  class="token_img"
+                  id="from_token_img"
+                  src="./alchemyLogo.png"
+                  height="25"
+                  width="25"
+                />
+                <span id="from_token_text">Select token</span>
+              </div>
+              <div class="swapbox_select">
+                <input
+                  type="number"
+                  class="number form-control"
+                  placeholder="amount"
+                  id="from_amount"
+                  min="0"
+                />
+              </div>
+            </div>
+            <button id="b1" class="aDown ani" type="button">
+              <img src="./up-down.png" width="35" height="40" />
+            </button>
+            <div class="swapbox">
+              <div
+                class="token_select"
+                id="to_token_select"
+                data-toggle="modal"
+                data-target="#token_modal"
+              >
+                <img
+                  class="token_img"
+                  id="to_token_img"
+                  src="./alchemyLogo.png"
+                  height="25"
+                  width="25"
+                />
+                <span id="to_token_text">Select token</span>
+              </div>
+              <div class="swapbox_select">
+                <input
+                  type="number"
+                  class="number form-control"
+                  placeholder="amount"
+                  id="to_amount"
+                  min="0"
+                />
+              </div>
+            </div>
+            <button
+              disabled
+              class="btn btn-large btn-primary btn-block"
+              id="swap_button"
+              style="
+                border-radius: 15px;
+                margin-top: 15px;
+                background-color: rgb(75, 135, 246);
+              "
+            >
+              Swap
+            </button>
+            <div class="gas_estimate_label">
+              Sources: <span id="sources" class="gasInfo"></span>
+            </div>
+            <div class="gas_estimate_label">
+              Estimated Gas:
+              <span id="gas_estimate" class="gasInfo"></span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="modal fade" id="token_modal" role="dialog">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content m1">
+          <div class="modal-header">
+            <input
+              class="form-control myInput"
+              placeholder="Search"
+              id="myInput"
+            />
+          </div>
+          <div class="modal-body" id="m-body"></div>
+        </div>
+      </div>
+    </div>
+    <script src="./index.js" type="module"></script>
+  </body>
+</html>
