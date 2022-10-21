@@ -10,6 +10,7 @@
   width: 50%;
   float: right;
   background-color: #f8f8f8;
+  border-radius: 10px;
 }
 .swapbox {
   overflow: auto;
@@ -63,7 +64,7 @@
 .m1 {
   border-radius: 20px;
   padding: 6px;
-  background-image: url("./a1.jpg");
+  background-image: url("./src/a1.jpg");
   background-size: cover;
 }
 .myInput {
@@ -80,7 +81,7 @@
   color: azure;
   border: none;
   border-radius: 10px;
-  background-color: #6e77f4;
+  background-color: #5a97ff;
 }
 .c1:hover {
   background-color: #535fff;
@@ -106,4 +107,24 @@
 button:focus {
   outline: none;
   box-shadow: none;
+}
+.modal-backdrop {
+  background: none;
+}
+.m2 {
+  padding: 5px;
+  background-image: linear-gradient(180deg, #a9c9ff 0%, #ffbbec 100%);
+  align-items: center;
+  position: absolute;
+  width: 150px;
+  border-radius: 15px;
+}
+.chain_row {
+  color: rgb(66, 66, 66);
+  padding: 5px;
+  border-radius: 10px;
+}
+.chain_row:hover {
+  background-color: #fec078;
+  cursor: pointer;
 }

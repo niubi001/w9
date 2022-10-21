@@ -1,8 +1,9 @@
-import { tl, chainInfo } from "./index1.js";
+import { tokenList, chainInfo } from "./info.js";
 
 let selectSide,
   lastFetchSide = "from",
   chain = "",
+  currentChainId,
   chainList = {};
 const chainIds = [1, 5, 10, 137, 42161];
 let currentTrade = { from: "", to: "" };
@@ -23,6 +24,7 @@ let ftNode = document.getElementById("from_token_select"),
   chain_button = document.getElementById("chain_button"),
   loadStr = document.getElementById("loadStr"),
   modalBody = document.getElementById("m-body"),
+  chainContent = document.getElementById("cm_content"),
   chainImg = chain_button.getElementsByTagName("img")[0],
   chainSpan = chain_button.getElementsByTagName("span")[0];
 const emptyNode = document.createElement("div");
@@ -233,48 +235,28 @@ function getSources(endpoint) {
 
 function chainIdToChain(_chainId) {
   const chainId = parseInt(_chainId);
-  function switchChain() {
+  let _chainInfo = chainInfo[chainId];
+  if (_chainInfo !== undefined) {
+    chain = _chainInfo.prefix;
+    chainSpan.innerText = _chainInfo.name;
+    chainImg.src = _chainInfo.src;
+    chain_button.style.background =
+      "linear-gradient(62deg, #71b6fa 0%, #d6a8fd 100%)";
     const newChain = chainList[chainId];
     modalBody.replaceChild(newChain, currentChain);
     currentChain = newChain;
+  } else {
+    chain = "-";
+    chainSpan.innerText = "Unsupported Chain";
+    chainImg.src = "./src/alchemyLogo.png";
+    chain_button.style.backgroundColor = "#878787";
+    modalBody.replaceChild(emptyNode, currentChain);
+    currentChain = emptyNode;
   }
-  function cbStyle(str) {
-    chain = str;
-    chain_button.style.backgroundColor = "#cc8800";
-    chainImg.src = chainInfo[chainId];
-    chainSpan.innerText = chain[0].toUpperCase() + chain.slice(1, -1);
-    switchChain();
-  }
-  switch (chainId) {
-    case 1:
-      chain = "";
-      chain_button.style.backgroundColor = "#cc8800";
-      chainImg.src = chainInfo[chainId];
-      chainSpan.innerText = "Ethereum";
-      switchChain();
-      break;
-    case 5:
-      cbStyle("goerli.");
-      break;
-    case 137:
-      cbStyle("polygon.");
-      break;
-    case 10:
-      cbStyle("optimism.");
-      break;
-    case 42161:
-      cbStyle("arbitrum.");
-      break;
-    default:
-      chain = "-";
-      chain_button.style.backgroundColor = "#878787";
-      chainImg.src = "./alchemyLogo.png";
-      chainSpan.innerText = "Unsupported Chain";
-      modalBody.replaceChild(emptyNode, currentChain);
-      currentChain = emptyNode;
-  }
-  ftNode.getElementsByTagName("img")[0].src = "./alchemyLogo.png";
-  ttNode.getElementsByTagName("img")[0].src = "./alchemyLogo.png";
+  currentChainId = chainId;
+
+  ftNode.getElementsByTagName("img")[0].src = "./src/alchemyLogo.png";
+  ttNode.getElementsByTagName("img")[0].src = "./src/alchemyLogo.png";
   ftNode.getElementsByTagName("span")[0].textContent = "Select Token";
   ttNode.getElementsByTagName("span")[0].textContent = "Select Token";
   faNode.value = "";
@@ -283,6 +265,8 @@ function chainIdToChain(_chainId) {
   pretAmount.to = "";
   currentTrade.from = "";
   currentTrade.to = "";
+  document.getElementById("gas_estimate").innerHTML = "";
+  document.getElementById("sources").innerHTML = "";
 }
 
 function callMetamask(to, sendData, foo) {
@@ -352,10 +336,32 @@ async function trySwap() {
   }
 }
 
+function switchChain(_chainId) {
+  if (_chainId === currentChainId) return;
+  let chainId = _chainId.toString(16);
+  ethereum
+    .request({
+      method: "wallet_switchEthereumChain",
+      params: [{ chainId: `0x${chainId}` }],
+    })
+    .catch((e) => {
+      if (e.code === 4902) addChain(_chainId);
+    });
+}
+
+function addChain(_chainId) {
+  ethereum
+    .request({
+      method: "wallet_addEthereumChain",
+      params: [chainInfo[_chainId].rpc],
+    })
+    .catch((e) => alert(e.message));
+}
+
 function init() {
   function cListNode(chainId) {
     let parent = document.createElement("div");
-    tl[chainId].forEach((token) => {
+    tokenList[chainId].forEach((token) => {
       let div = document.createElement("div");
       div.className = "token_row";
       let html = `
@@ -365,14 +371,27 @@ function init() {
       <span class="token_list_name">${token.name}</span>
       `;
       div.innerHTML = html;
-      div.onclick = () => {
-        selectToken(token);
-      };
+      div.onclick = () => selectToken(token);
       parent.appendChild(div);
     });
     chainList[chainId] = parent;
   }
   chainIds.forEach((_chainId) => cListNode(_chainId));
+
+  let parent = document.createElement("div");
+  chainIds.forEach((_chainId) => {
+    let _chainInfo = chainInfo[_chainId];
+    let div = document.createElement("div");
+    div.className = "chain_row";
+    let html = `
+      <img class="token_list_img" src="${_chainInfo.src}" height="30" width="30">
+      <span>${_chainInfo.name}</span>
+    `;
+    div.innerHTML = html;
+    div.onclick = () => switchChain(_chainId);
+    parent.appendChild(div);
+  });
+  document.getElementById("chain_body").appendChild(parent);
 
   myInput.onkeyup = searchToken;
   login_button.onclick = connect;
@@ -402,13 +421,28 @@ function init() {
   faNode.addEventListener("keypress", match1, false);
 
   $("#token_modal").on("hidden.bs.modal", () => {
-    $(".modal-body").scrollTop(0);
     let div = currentChain.getElementsByTagName("div");
     for (let i = 0; i < div.length; i++) {
       div[i].style.display = "";
     }
     myInput.value = "";
   });
+
+  let down_arrow = document.getElementById("down_arrow");
+  chain_button.onclick = () => {
+    if (login_button.innerHTML !== "Connected") return;
+    down_arrow.style.transform = "rotate(180deg)";
+    $("#chain_modal").modal("toggle");
+  };
+  $("#chain_modal").on(
+    "hidden.bs.modal",
+    () => (down_arrow.style.transform = "")
+  );
+  let posInfo = login_button.getBoundingClientRect();
+  let left1 = posInfo.left / 2 + 25;
+  let top1 = posInfo.top / 2 + 25;
+  chainContent.style.left = `${left1}px`;
+  chainContent.style.top = `${top1}px`;
 }
 
 init();

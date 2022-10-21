@@ -1,4 +1,4 @@
-export const tl = {
+export const tokenList = {
   1: [
     {
       chainId: 1,
@@ -6734,9 +6734,67 @@ export const tl = {
 };
 
 export const chainInfo = {
-  1: "./eth_p.png",
-  5: "./eth_p.png",
-  10: "https://app.uniswap.org/static/media/optimistic_ethereum.34412af2.svg",
-  137: "https://app.uniswap.org/static/media/polygon-matic-logo.97ff139c.svg",
-  42161: "https://app.uniswap.org/static/media/arbitrum_logo.ec8e5080.svg",
+  1: {
+    prefix: "",
+    name: "Ethereum",
+    src: "./src/eth_p.png",
+  },
+  5: { prefix: "goerli.", name: "Goerli", src: "./src/eth_p.png" },
+  10: {
+    prefix: "optimism.",
+    name: "Optimism",
+    src: "https://app.uniswap.org/static/media/optimistic_ethereum.34412af2.svg",
+    rpc: {
+      chainId: "0xa",
+      chainName: "Optimism",
+      rpcUrls: ["https://mainnet.optimism.io"],
+      iconUrls: [
+        "https://app.uniswap.org/static/media/optimistic_ethereum.34412af2.svg",
+      ],
+      nativeCurrency: {
+        name: "Optimism",
+        symbol: "ETH",
+        decimals: 18,
+      },
+      blockExplorerUrls: ["https://optimistic.etherscan.io"],
+    },
+  },
+  137: {
+    prefix: "polygon.",
+    name: "Polygon",
+    src: "https://app.uniswap.org/static/media/polygon-matic-logo.97ff139c.svg",
+    rpc: {
+      chainId: "0x89",
+      chainName: "Polygon",
+      rpcUrls: ["https://polygon-rpc.com"],
+      iconUrls: [
+        "https://app.uniswap.org/static/media/polygon-matic-logo.97ff139c.svg",
+      ],
+      nativeCurrency: {
+        name: "Polygon",
+        symbol: "MATIC",
+        decimals: 18,
+      },
+      blockExplorerUrls: ["https://polygonscan.com"],
+    },
+  },
+  42161: {
+    prefix: "arbitrum.",
+    name: "Arbitrum",
+    src: "https://app.uniswap.org/static/media/arbitrum_logo.ec8e5080.svg",
+    rpc: {
+      chainId: "0xa4b1",
+      chainName: "Arbitrum One",
+      rpcUrls: ["https://arb1.arbitrum.io/rpc"],
+      iconUrls: [
+        "https://app.uniswap.org/static/media/arbitrum_logo.ec8e5080.svg",
+      ],
+      nativeCurrency: {
+        name: "Arbitrum",
+        symbol: "ETH",
+        decimals: 18,
+      },
+      blockExplorerUrls: ["https://arbiscan.io"],
+    },
+  },
 };

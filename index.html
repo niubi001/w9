@@ -2,7 +2,7 @@
 <html>
   <head>
     <meta charset="utf-8" />
-    <link rel="icon" href="./alchemyLogo.png" />
+    <link rel="icon" href="./src/alchemyLogo.png" />
     <meta
       name="viewport"
       content="width=device-width, initial-scale=1, shrink-to-fit=no"
@@ -27,7 +27,7 @@
     <link rel="stylesheet" href="./style.css" />
   </head>
 
-  <body style="background-image: url('bg.png'); background-size: cover">
+  <body style="background-image: url('./src/bg.png'); background-size: cover">
     <nav class="navbar navbar-expand-lg">
       <a style="color: azure" class="navbar-brand">My DEX Aggregator</a>
       <li class="connect">
@@ -35,10 +35,21 @@
           id="chain_button"
           class="btn btn-outline-primary my-2 my-sm-0"
           type="submit"
-          style="color: azure; border: none; border-radius: 20px"
+          style="
+            color: azure;
+            border: none;
+            border-radius: 20px;
+            margin-right: 10px;
+          "
         >
-          <img src="./alchemyLogo.png" height="30" width="30" />
-          <span>Switch Chain</span>
+          <img src="./src/alchemyLogo.png" height="30" width="30" />
+          <span style="color: rgb(66, 66, 66)">Switch Chain</span>
+          <img
+            id="down_arrow"
+            src="./src/down_arrow.png"
+            height="30"
+            width="30"
+          />
         </div>
         <button
           id="login_button"
@@ -70,7 +81,7 @@
                 <img
                   class="token_img"
                   id="from_token_img"
-                  src="./alchemyLogo.png"
+                  src="./src/alchemyLogo.png"
                   height="25"
                   width="25"
                 />
@@ -83,11 +94,12 @@
                   placeholder="amount"
                   id="from_amount"
                   min="0"
+                  style="border-radius: 10px"
                 />
               </div>
             </div>
             <button id="b1" class="aDown ani" type="button">
-              <img src="./up-down.png" width="35" height="40" />
+              <img src="./src/up-down.png" width="35" height="40" />
             </button>
             <div class="swapbox">
               <div
@@ -99,7 +111,7 @@
                 <img
                   class="token_img"
                   id="to_token_img"
-                  src="./alchemyLogo.png"
+                  src="./src/alchemyLogo.png"
                   height="25"
                   width="25"
                 />
@@ -112,6 +124,7 @@
                   placeholder="amount"
                   id="to_amount"
                   min="0"
+                  style="border-radius: 10px"
                 />
               </div>
             </div>
@@ -138,7 +151,7 @@
         </div>
       </div>
     </div>
-    <div class="modal fade" id="token_modal" role="dialog">
+    <div class="modal" id="token_modal" role="dialog">
       <div class="modal-dialog" role="document">
         <div class="modal-content m1">
           <div class="modal-header">
@@ -149,6 +162,13 @@
             />
           </div>
           <div class="modal-body" id="m-body"></div>
+        </div>
+      </div>
+    </div>
+    <div class="modal" id="chain_modal" role="dialog">
+      <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content m2" id="cm_content">
+          <div id="chain_body"></div>
         </div>
       </div>
     </div>
