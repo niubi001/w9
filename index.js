@@ -370,10 +370,11 @@ function addChain(_chainId) {
 
 function modal_location() {
   let posInfo = chain_button.getBoundingClientRect();
-  let left1 = posInfo.left - (innerWidth / 2 - 250) + 35;
+  let right1 = posInfo.right - (innerWidth / 2 + 250);
   let top1 = posInfo.top + 20;
-  chainContent.style.left = `${left1}px`;
+  chainContent.style.right = `${-right1}px`;
   chainContent.style.top = `${top1}px`;
+  // console.log(right1);
 }
 
 function init() {
@@ -441,6 +442,9 @@ function init() {
   chain_button.onclick = () => {
     down_arrow.style.transform = "rotate(180deg)";
     $("#chain_modal").modal("toggle");
+    // let posInfo = chain_button.getBoundingClientRect();
+    // let posContent = chainContent.getBoundingClientRect();
+    // console.log(posInfo, posContent);
   };
   $("#chain_modal").on(
     "hidden.bs.modal",
