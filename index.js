@@ -4,6 +4,7 @@ let selectSide,
   lastFetchSide = "from",
   chain = "",
   currentChainId,
+  divs,
   chainList = {};
 const chainIds = [1, 5, 10, 137, 42161];
 let currentTrade = { from: "", to: "" };
@@ -42,25 +43,17 @@ async function connect() {
     } catch (error) {
       console.log(error);
     }
-  } else {
-    login_button.innerHTML = "Please install MetaMask";
-  }
+  } else login_button.innerHTML = "Please install MetaMask";
 }
 
 function searchToken() {
-  let input, filter, div, a, i, txtValue;
-  input = document.getElementById("myInput");
-  filter = input.value.toUpperCase();
-  div = currentChain.getElementsByTagName("div");
-  for (i = 0; i < div.length; i++) {
-    a = div[i].getElementsByTagName("span")[0];
-    txtValue = a.textContent;
-    if (txtValue.startsWith(filter)) {
-      div[i].style.display = "";
-    } else {
-      div[i].style.display = "none";
-    }
-  }
+  let filter, tList, i;
+  filter = myInput.value.toUpperCase();
+  tList = tokenList[currentChainId];
+  for (i = 0; i < tList.length; i++)
+    if (tList[i].src.startsWith(filter)) {
+      divs[i].style.display = "";
+    } else divs[i].style.display = "none";
 }
 
 function selectToken(token) {
@@ -254,6 +247,7 @@ function chainIdToChain(_chainId) {
     currentChain = emptyNode;
   }
   currentChainId = chainId;
+  divs = currentChain.getElementsByTagName("div");
 
   ftNode.getElementsByTagName("img")[0].src = "./src/alchemyLogo.png";
   ttNode.getElementsByTagName("img")[0].src = "./src/alchemyLogo.png";
