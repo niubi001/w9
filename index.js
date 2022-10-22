@@ -441,8 +441,6 @@ function init() {
   chain_button.onclick = () => {
     down_arrow.style.transform = "rotate(180deg)";
     $("#chain_modal").modal("toggle");
-    let posContent = chainContent.getBoundingClientRect();
-    console.log(posContent, innerHeight);
   };
   $("#chain_modal").on(
     "hidden.bs.modal",
