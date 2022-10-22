@@ -51,7 +51,7 @@ function searchToken() {
   filter = myInput.value.toUpperCase();
   tList = tokenList[currentChainId];
   for (i = 0; i < tList.length; i++)
-    if (tList[i].src.startsWith(filter)) {
+    if (tList[i].symbol.startsWith(filter)) {
       divs[i].style.display = "";
     } else divs[i].style.display = "none";
 }
