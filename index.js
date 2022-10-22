@@ -40,10 +40,22 @@ async function connect() {
       login_button.innerHTML = "Connected";
       login_button.style.backgroundColor = "#62ad47";
       swap_button.disabled = false;
+
+      ethereum.on("chainChanged", (_chainId) => chainIdToChain(_chainId));
+      ethereum
+        .request({
+          method: "eth_chainId",
+          params: [],
+        })
+        .then((_chainId) => {
+          chainIdToChain(_chainId);
+        })
+        .catch((e) => alert(e.message));
     } catch (error) {
       console.log(error);
     }
   } else login_button.innerHTML = "Please install MetaMask";
+  modal_location();
 }
 
 function searchToken() {
@@ -242,7 +254,7 @@ function chainIdToChain(_chainId) {
     chain = "-";
     chainSpan.innerText = "Unsupported Chain";
     chainImg.src = "./src/alchemyLogo.png";
-    chain_button.style.backgroundColor = "#878787";
+    chain_button.style.background = "none";
     modalBody.replaceChild(emptyNode, currentChain);
     currentChain = emptyNode;
   }
@@ -332,6 +344,10 @@ async function trySwap() {
 
 function switchChain(_chainId) {
   if (_chainId === currentChainId) return;
+  if (login_button.innerHTML !== "Connected") {
+    chainIdToChain(_chainId);
+    return;
+  }
   let chainId = _chainId.toString(16);
   ethereum
     .request({
@@ -350,6 +366,14 @@ function addChain(_chainId) {
       params: [chainInfo[_chainId].rpc],
     })
     .catch((e) => alert(e.message));
+}
+
+function modal_location() {
+  let posInfo = chain_button.getBoundingClientRect();
+  let left1 = posInfo.left - (innerWidth / 2 - 250) + 35;
+  let top1 = posInfo.top + 20;
+  chainContent.style.left = `${left1}px`;
+  chainContent.style.top = `${top1}px`;
 }
 
 function init() {
@@ -395,16 +419,7 @@ function init() {
   taNode.onblur = async () => await getData("price", "to");
   exchangeB.onclick = exchangePos;
   swap_button.onclick = trySwap;
-  ethereum.on("chainChanged", (_chainId) => chainIdToChain(_chainId));
-  ethereum
-    .request({
-      method: "eth_chainId",
-      params: [],
-    })
-    .then((_chainId) => {
-      chainIdToChain(_chainId);
-    })
-    .catch((e) => alert(e.message));
+  chainIdToChain(1);
 
   function match1(event) {
     const regex = /[-+e]/;
@@ -424,19 +439,16 @@ function init() {
 
   let down_arrow = document.getElementById("down_arrow");
   chain_button.onclick = () => {
-    if (login_button.innerHTML !== "Connected") return;
     down_arrow.style.transform = "rotate(180deg)";
     $("#chain_modal").modal("toggle");
+    let posContent = chainContent.getBoundingClientRect();
+    console.log(posContent, innerHeight);
   };
   $("#chain_modal").on(
     "hidden.bs.modal",
     () => (down_arrow.style.transform = "")
   );
-  let posInfo = login_button.getBoundingClientRect();
-  let left1 = posInfo.left / 2 + 25;
-  let top1 = posInfo.top / 2 + 25;
-  chainContent.style.left = `${left1}px`;
-  chainContent.style.top = `${top1}px`;
+  modal_location();
 }
 
 init();
