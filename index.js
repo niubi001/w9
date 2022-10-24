@@ -48,7 +48,7 @@ async function connect() {
           params: [],
         })
         .then((_chainId) => {
-          chainIdToChain(_chainId);
+          if (parseInt(_chainId) !== currentChainId) chainIdToChain(_chainId);
         })
         .catch((e) => alert(e.message));
     } catch (error) {
@@ -115,7 +115,7 @@ function openModal(side) {
 }
 
 async function getData(endpoint, side) {
-  if (chain === "-" || !currentTrade.from || !currentTrade.to) return;
+  if (chain === "-" || !currentTrade.from || !currentTrade.to) return false;
   let _tAmount = (tAmount[side] = document.getElementById(
     `${side}_amount`
   ).value);
@@ -326,13 +326,13 @@ function waitMined(txHash, foo) {
 
 async function trySwap() {
   try {
-    await getData("quote", lastFetchSide);
+    let getStatus = await getData("quote", lastFetchSide);
+    if (getStatus === false) return;
     const quoteJSON = swapJSON.quote;
     const targetAddr = quoteJSON.allowanceTarget.slice(2);
     const addrData = "0".repeat(64 - targetAddr.length) + targetAddr;
-    const sellAmount = quoteJSON.sellAmount.toString(16);
+    const sellAmount = parseInt(quoteJSON.sellAmount).toString(16);
     const sAmountData = "0".repeat(64 - sellAmount.length) + sellAmount;
-
     const apKec = "095ea7b3";
     const sendData = `0x${apKec}${addrData}${sAmountData}`;
     const foo1 = () => callMetamask(quoteJSON.to, quoteJSON.data, () => {});
